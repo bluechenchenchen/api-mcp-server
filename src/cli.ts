@@ -1,16 +1,16 @@
 /*
  * @Author: blue
  * @Date: 2025-07-04 10:23:12
- * @FilePath: /mcp_server_ts/src/cli.ts
+ * @FilePath: /api-mcp-server/src/cli.ts
  */
 // 导入stdio服务器传输模块，用于标准输入输出通信
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { startHttpServer } from "./server.ts";
+import { startHttpServer } from "./server";
 // 导入服务器配置获取函数，用于获取服务器运行配置
-import { getServerConfig } from "./config.ts";
+import { getServerConfig } from "./config";
 // 导入MCP服务器创建函数，用于创建MCP服务器实例
-import { createServer } from "./mcp.ts";
+import { createServer } from "./mcp";
 import { config } from "dotenv";
 import { resolve } from "path";
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: blue
  * @Date: 2025-07-02 16:17:14
- * @FilePath: /mcp_server_ts/README.md
+ * @FilePath: /api-mcp-server/README.md
 -->
 
 # MCP Server TypeScript
@@ -14,10 +14,7 @@
 - 支持 MCP 协议的工具函数实现
 - 支持 SSE 实时数据传输
 - 包含示例工具：
-  - 获取当前时间
-  - 查询城市天气
-  - 查询员工绩效
-  - Figma 设计稿操作
+
   - API 文档查询
 
 ## 快速开始
@@ -68,13 +65,6 @@ pnpm start
 
 #### GET /sse
 
-建立 SSE 连接的端点。
-
-请求参数：
-
-- `doc_url` (query string): 可选，文档 URL
-- `x-mcp-env` (header): 可选，JSON 格式的环境变量
-
 ### MCP 消息
 
 #### POST /messages
@@ -94,18 +84,7 @@ pnpm start
 
 ## 可用工具
 
-### 1. getCurrentTime
-
-- 描述：获取当前时间
-- 参数：
-  ```json
-  {
-    "random_string": "string" // 占位参数
-  }
-  ```
-- 返回：格式化的时间字符串 (YYYY-MM-DD HH:mm:ss)
-
-### 2. get_api_list
+### 1. get_api_list
 
 - 描述：获取所有可用的 API 接口文档
 - 参数：
@@ -115,61 +94,6 @@ pnpm start
   }
   ```
 - 返回：API 文档内容字符串
-
-### 3. get_figma_data
-
-- 描述：获取 Figma 文件或节点数据
-- 参数：
-  ```json
-  {
-    "fileKey": "string", // Figma 文件 key
-    "nodeId": "string", // 可选，节点 ID
-    "depth": "number" // 可选，遍历深度
-  }
-  ```
-- 返回：Figma 数据对象
-
-### 4. download_figma_images
-
-- 描述：下载 Figma 文件中的图片
-- 参数：
-  ```json
-  {
-    "fileKey": "string", // Figma 文件 key
-    "nodes": [
-      {
-        // 要下载的节点列表
-        "nodeId": "string", // 节点 ID
-        "fileName": "string", // 保存的文件名
-        "imageRef": "string" // 可选，图片引用
-      }
-    ],
-    "localPath": "string", // 保存路径
-    "pngScale": "number", // 可选，PNG 缩放比例
-    "svgOptions": {
-      // 可选，SVG 选项
-      "includeId": "boolean",
-      "outlineText": "boolean",
-      "simplifyStroke": "boolean"
-    }
-  }
-  ```
-- 返回：下载结果对象
-
-## 项目结构
-
-```
-src/
-├── dev.ts              # 开发服务器入口
-├── sse/
-│   └── server.ts      # SSE 服务器实现
-├── tools/
-│   ├── api.ts         # API 工具
-│   ├── time.ts        # 时间工具
-│   └── figma.ts       # Figma 工具
-└── types/
-    └── mcp.d.ts       # MCP 类型定义
-```
 
 ## 开发说明
 

@@ -1,9 +1,9 @@
 /*
  * @Author: blue
  * @Date: 2025-07-04 10:12:40
- * @FilePath: /mcp_server_ts/src/server-sse.ts
+ * @FilePath: /api-mcp-server/src/server-sse.ts
  */
-import { Logger } from "./utils/logger.ts";
+import { Logger } from "./utils/logger";
 import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";

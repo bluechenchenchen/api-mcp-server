@@ -1,11 +1,11 @@
 /*
  * @Author: blue
  * @Date: 2025-07-04 10:40:00
- * @FilePath: /mcp_server_ts/src/mcp.ts
+ * @FilePath: /api-mcp-server/src/mcp.ts
  */
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerTools } from "./tools/index.ts";
+import { registerTools } from "./tools/index";
 
 function createServer(): McpServer {
   const server: McpServer = new McpServer({

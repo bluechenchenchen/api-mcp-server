@@ -4,7 +4,7 @@
  * @FilePath: /api-mcp-server/src/tools/index.ts
  */
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { registerApiTool } from "./api.ts";
+import { registerApiTool } from "./api";
 
 export function registerTools(server: McpServer) {
   registerApiTool(server);

@@ -1,9 +1,9 @@
 /*
  * @Author: blue
  * @Date: 2025-07-04 10:12:40
- * @FilePath: /mcp_server_ts/src/server.ts
+ * @FilePath: /api-mcp-server/src/server.ts
  */
-import { Logger } from "./utils/logger.ts";
+import { Logger } from "./utils/logger";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import express from "express";
 import { randomUUID } from "node:crypto";
@@ -18,7 +18,7 @@ import {
   sseTransports,
   setSSEMode,
   isSSEEnabled,
-} from "./server-sse.ts";
+} from "./server-sse";
 
 let httpServer: Server | null = null;
 
