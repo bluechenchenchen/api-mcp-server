@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "project_local_api_mcp_server": {
+      "url": "http://localhost:3000/mcp",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer 34567890"
+      }
+    }
+  }
+}
