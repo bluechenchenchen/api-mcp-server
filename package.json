@@ -10,7 +10,8 @@
     "cli:dev": "nodemon --exec ts-node src/cli.ts",
     "ui": "npx @modelcontextprotocol/inspector",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:cli": "node dist/cli.js"
+    "start:cli": "node dist/cli.js",
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "mcp",
