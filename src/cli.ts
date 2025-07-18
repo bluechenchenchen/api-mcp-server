@@ -13,15 +13,46 @@ import { getServerConfig } from "./config";
 import { createServer } from "./mcp";
 import { config } from "dotenv";
 import { resolve } from "path";
+import { Command } from "commander";
 
 // 使用resolve函数将当前工作目录与.env文件路径合并
 config({ path: resolve(process.cwd(), ".env") });
+
+// 使用commander解析命令行参数
+const program = new Command()
+  .name("api-mcp-server")
+  .version("1.0.0")
+  .option("--transport <stdio|http|sse>", "transport type", "stdio") // 设置传输类型选项
+  .option("--port <number>", "port for HTTP/SSE transport", "3000") // 设置端口选项
+  .option("--enable-sse", "enable SSE transport", false) // 设置SSE选项
+  .option("--enable-http", "enable HTTP transport", false) // 设置HTTP选项
+  .option("--enable-stdio", "enable stdio transport", true) // 设置stdio选项
+  .option("--doc-url <url>", "document url", "http://localhost:3000/api-docs") // 设置文档URL选项
+  .allowUnknownOption() // let MCP Inspector / other wrappers pass through extra flags  // 允许未知选项通过
+  .parse(process.argv); // 解析命令行参数
+
+const cliOptions = program.opts<{
+  // 获取解析后的命令行选项
+  transport: string;
+  port: string;
+  enableSSE: boolean;
+  enableHttp: boolean;
+  enableStdio: boolean;
+  docUrl: string;
+}>();
+
+// 设置环境变量
+process.env.TRANSPORT = cliOptions.transport;
+process.env.PORT = cliOptions.port;
+process.env.DOC_URL = cliOptions.docUrl;
 
 export async function startServer() {
   // 检查是否在stdio模式下运行（例如，通过CLI）
   // 通过环境变量NODE_ENV或命令行参数--stdio来判断运行模式
   const isStdioMode =
-    process.env.NODE_ENV === "cli" || process.argv.includes("--stdio");
+    process.env.TRANSPORT === "stdio" ||
+    process.env.NODE_ENV === "cli" ||
+    process.argv.includes("--stdio");
 
   const config = getServerConfig();
 
