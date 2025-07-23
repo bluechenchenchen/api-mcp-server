@@ -41,12 +41,6 @@ pnpm start:dev
 yarn ui
 ```
 
-npm error notarget No matching version found for @floating-ui/utils@^0.2.10.
-
-```bash
-npm cache clean --force
-```
-
 ### 构建
 
 ```bash
@@ -57,29 +51,6 @@ pnpm build
 
 ```bash
 pnpm start
-```
-
-## API 接口
-
-### SSE 连接
-
-#### GET /sse
-
-### MCP 消息
-
-#### POST /messages
-
-处理 MCP 协议请求的主要端点。
-
-请求体格式：
-
-```json
-{
-  "name": "工具名称",
-  "parameters": {
-    // 工具所需参数
-  }
-}
 ```
 
 ## 可用工具
@@ -108,15 +79,3 @@ pnpm start
 - `PORT`: 服务器端口号（默认：18081）
 - `HOST`: 服务器主机地址（默认：0.0.0.0）
 - `DOC_URL`: 文档 URL（可选）
-
-## 贡献指南
-
-1. Fork 本仓库
-2. 创建功能分支
-3. 提交更改
-4. 推送到分支
-5. 创建 Pull Request
-
-## 许可证
-
-ISC
