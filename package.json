@@ -4,7 +4,7 @@
   "description": "MCP Server implementation in TypeScript",
   "main": "dist/cli.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node src/cli.ts",
+    "dev": "nodemon --exec ts-node src/cli.ts --transport http --port 3001 --doc-url https://ias-backend-test.belle.cn/v3/api-docs",
     "build": "tsc",
     "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
     "start": "node dist/cli.js",
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/bluechenchenchen/api-mcp-server#readme",
   "dependencies": {
+    "@apidevtools/swagger-parser": "^12.0.0",
     "@modelcontextprotocol/sdk": "^1.13.3",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
@@ -37,6 +38,7 @@
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "express-sse": "^1.0.0",
+    "swagger-parser": "^10.0.3",
     "uuid": "^11.1.0",
     "zod": "^3.25.71"
   },
@@ -44,6 +46,7 @@
     "@types/node": "^24.0.10",
     "esbuild": "^0.25.6",
     "nodemon": "^3.1.10",
+    "openapi-types": "^12.1.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }

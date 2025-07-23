@@ -79,3 +79,5 @@ pnpm start
 - `PORT`: 服务器端口号（默认：18081）
 - `HOST`: 服务器主机地址（默认：0.0.0.0）
 - `DOC_URL`: 文档 URL（可选）
+
+swagger-ui:https://github.com/swagger-api/swagger-ui
