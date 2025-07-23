@@ -1,0 +1,50 @@
+{
+  "name": "api-mcp-server",
+  "version": "1.0.2",
+  "description": "MCP Server implementation in TypeScript",
+  "main": "dist/cli.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/cli.ts",
+    "build": "tsc",
+    "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
+    "start": "node dist/cli.js",
+    "ui": "npx @modelcontextprotocol/inspector",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "mcp",
+    "server",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bluechenchenchen/api-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bluechenchenchen/api-mcp-server/issues"
+  },
+  "homepage": "https://github.com/bluechenchenchen/api-mcp-server#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.3",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/uuid": "^10.0.0",
+    "axios": "^1.10.0",
+    "commander": "^14.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "express-sse": "^1.0.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.71"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "esbuild": "^0.25.6",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
