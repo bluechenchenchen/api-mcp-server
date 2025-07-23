@@ -1,8 +1,11 @@
 {
   "name": "api-mcp-server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MCP Server implementation in TypeScript",
   "main": "dist/cli.js",
+  "bin": {
+    "api-mcp-server": "./dist/cli.js"
+  },
   "scripts": {
     "dev": "nodemon --exec ts-node src/cli.ts --transport http --port 3001 --doc-url https://ias-backend-test.belle.cn/v3/api-docs",
     "build": "tsc",
