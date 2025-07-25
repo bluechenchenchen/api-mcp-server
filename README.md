@@ -1,83 +1,100 @@
-<!--
- * @Author: blue
- * @Date: 2025-07-02 16:17:14
- * @FilePath: /api-mcp-server/README.md
--->
+# api-mcp-server
 
-# MCP Server TypeScript
+English | [简体中文](README.zh-CN.md)
 
-基于 TypeScript 实现的 Model Context Protocol (MCP) 服务器。支持 SSE（Server-Sent Events）连接，用于实时数据传输。
+<div align="center">
+  <h1> API MCP Server</h1>
+  <p>A Swagger/OpenAPI documentation fetcher based on MCP (Model Context Protocol)</p>
+  <br />
+</div>
 
-## 功能特性
+<br/>
 
-- 基于 Express 框架的 HTTP 服务器
-- 支持 MCP 协议的工具函数实现
-- 支持 SSE 实时数据传输
-- 包含示例工具：
+This is a Swagger/OpenAPI documentation fetcher based on MCP (Model Context Protocol). It can fetch and parse Swagger/OpenAPI documentation from a specified URL and supports multiple transport methods.
 
-  - API 文档查询
+## ✨ Features
 
-## 快速开始
+- Fetch Swagger/OpenAPI documentation from remote URLs
+- Support for both Swagger 2.0 and OpenAPI 3.x formats
+- Multiple transport methods:
+  - stdio: Standard input/output mode
+  - http: HTTP server mode
+  - sse: Server-Sent Events mode
+- Automatic port allocation and failover
+- CORS support
+- Comprehensive error handling
 
-### 安装依赖
+## Getting Started
 
-```bash
-pnpm install
+### MacOS / Linux
+
+```json
+{
+  "mcpServers": {
+    "swagger-api-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "swagger-api-mcp",
+        "--transport",
+        "stdio",
+        "--doc-url",
+        "xxx"
+      ]
+    }
+  }
+}
 ```
 
-### 开发模式
+### Windows
+
+```json
+{
+  "mcpServers": {
+    "swagger-api-mcp": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "swagger-api-mcp",
+        "--transport",
+        "stdio",
+        "--doc-url",
+        "xxx"
+      ]
+    }
+  }
+}
+```
+
+### Command Line Arguments
+
+- `--transport <stdio|http|sse>`: Choose transport method (default: stdio)
+- `--port <number>`: HTTP/SSE server port (default: 3000)
+- `--doc-url <url>`: Swagger/OpenAPI documentation URL (required)
+
+## 💻 Development
 
 ```bash
-# 使用 nodemon 热重载
+# Clone the repository
+git clone https://github.com/bluechenchenchen/swagger-api-mcp.git
+
+# Install dependencies
+pnpm install
+
+# Run in development mode
 pnpm dev
 
-# 或使用 ts-node 直接运行
-pnpm start:dev
-```
-
-### 调试
-
-```bash
-yarn ui
-```
-
-### 构建
-
-```bash
+# Build
 pnpm build
 ```
 
-### 生产环境运行
+## 📋 Requirements
 
-```bash
-pnpm start
-```
+- Node.js >= 16.0.0
+- npm >= 6.0.0 or pnpm >= 6.0.0
 
-## 可用工具
+## 📄 License
 
-### 1. get_api_list
-
-- 描述：获取所有可用的 API 接口文档
-- 参数：
-  ```json
-  {
-    "random_string": "string" // 占位参数
-  }
-  ```
-- 返回：API 文档内容字符串
-
-## 开发说明
-
-- 使用 TypeScript 进行开发
-- 使用 nodemon 实现热重载
-- 使用 Express 作为 Web 框架
-- 使用 express-sse 实现 SSE
-- 使用 @modelcontextprotocol/sdk 实现 MCP 协议
-
-## 环境变量
-
-- `PORT`: 服务器端口号（默认：18081）
-- `HOST`: 服务器主机地址（默认：0.0.0.0）
-- `DOC_URL`: 文档 URL（可选）
-
-swagger-ui:https://github.com/swagger-api/swagger-ui
+MIT

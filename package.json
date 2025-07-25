@@ -1,26 +1,28 @@
 {
   "name": "api-mcp-server",
-  "version": "1.0.3",
-  "description": "MCP Server implementation in TypeScript",
-  "main": "dist/cli.js",
+  "version": "1.0.4",
+  "description": "MCP Server for OpenAPI Specification",
+  "main": "dist/index.js",
   "bin": {
-    "api-mcp-server": "./dist/cli.js"
+    "api-mcp-server": "./dist/index.js"
   },
   "scripts": {
-    "dev": "nodemon --exec ts-node src/cli.ts --transport http --port 3001 --doc-url https://ias-backend-test.belle.cn/v3/api-docs",
+    "dev": "nodemon --exec ts-node src/index.ts --transport http --port 3000 --doc-url xxx",
     "build": "tsc",
     "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
     "start": "node dist/cli.js",
-    "ui": "npx @modelcontextprotocol/inspector",
+    "debug": "npx @modelcontextprotocol/inspector",
     "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "mcp",
     "server",
-    "typescript"
+    "typescript",
+    "swagger",
+    "openapi"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "bluechenchenchen",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bluechenchenchen/api-mcp-server.git"
@@ -35,7 +37,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/uuid": "^10.0.0",
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "commander": "^14.0.0",
     "cors": "^2.8.5",
     "dotenv": "^17.0.1",
@@ -43,7 +45,7 @@
     "express-sse": "^1.0.0",
     "swagger-parser": "^10.0.3",
     "uuid": "^11.1.0",
-    "zod": "^3.25.71"
+    "zod": "^4.0.9"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
