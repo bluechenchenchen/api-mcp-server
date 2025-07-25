@@ -3,19 +3,19 @@
 English | [简体中文](README.zh-CN.md)
 
 <div align="center">
-  <h1> API MCP Server</h1>
-  <p>A Swagger/OpenAPI documentation fetcher based on MCP (Model Context Protocol)</p>
+  <h1>API MCP Server</h1>
+  <p>A Swagger/OpenAPI Documentation Retrieval Tool Based on MCP (Model Context Protocol)</p>
   <br />
 </div>
 
 <br/>
 
-This is a Swagger/OpenAPI documentation fetcher based on MCP (Model Context Protocol). It can fetch and parse Swagger/OpenAPI documentation from a specified URL and supports multiple transport methods.
+This is a Swagger/OpenAPI documentation retrieval tool based on MCP (Model Context Protocol). It can fetch and parse Swagger/OpenAPI documentation from specified URLs and supports multiple transport methods.
 
 ## ✨ Features
 
 - Fetch Swagger/OpenAPI documentation from remote URLs
-- Support for both Swagger 2.0 and OpenAPI 3.x formats
+- Support for Swagger 2.0 and OpenAPI 3.x formats
 - Multiple transport methods:
   - stdio: Standard input/output mode
   - http: HTTP server mode
@@ -31,11 +31,11 @@ This is a Swagger/OpenAPI documentation fetcher based on MCP (Model Context Prot
 ```json
 {
   "mcpServers": {
-    "swagger-api-mcp": {
+    "api-mcp-server": {
       "command": "npx",
       "args": [
         "-y",
-        "swagger-api-mcp",
+        "api-mcp-server",
         "--transport",
         "stdio",
         "--doc-url",
@@ -51,13 +51,13 @@ This is a Swagger/OpenAPI documentation fetcher based on MCP (Model Context Prot
 ```json
 {
   "mcpServers": {
-    "swagger-api-mcp": {
+    "api-mcp-server": {
       "command": "cmd",
       "args": [
         "/c",
         "npx",
         "-y",
-        "swagger-api-mcp",
+        "api-mcp-server",
         "--transport",
         "stdio",
         "--doc-url",
@@ -78,7 +78,7 @@ This is a Swagger/OpenAPI documentation fetcher based on MCP (Model Context Prot
 
 ```bash
 # Clone the repository
-git clone https://github.com/bluechenchenchen/swagger-api-mcp.git
+git clone https://github.com/bluechenchenchen/api-mcp-server.git
 
 # Install dependencies
 pnpm install

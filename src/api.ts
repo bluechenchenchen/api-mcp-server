@@ -1,6 +1,8 @@
 import { SwaggerDoc } from "./types/index.js";
 import axios from "axios";
 
+// https://github.com/APIDevTools/swagger-parser
+
 export async function fetchDocumentation(url: string): Promise<SwaggerDoc> {
   const headers = {
     "Content-Type": "application/json",
