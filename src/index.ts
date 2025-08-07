@@ -10,6 +10,7 @@ import { Command } from "commander";
 import { fetchDocumentation } from "./fetchDocumentation";
 
 import { parseApiDoc } from "./parser";
+const swaggerData = require("./examples/openAi-swagger2-data.js");
 
 const program = new Command()
   .option("--transport <stdio|http|sse>", "transport type", "stdio")
@@ -176,6 +177,9 @@ async function main() {
         } else if (url === "/ping") {
           res.writeHead(200, { "Content-Type": "text/plain" });
           res.end("pong");
+        } else if (url === "/docs") {
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify(swaggerData));
         } else {
           res.writeHead(404);
           res.end("Not found");
