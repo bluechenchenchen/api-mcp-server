@@ -61,7 +61,7 @@ function createServerInstance() {
   const server = new McpServer(
     {
       name: "API MCP Server",
-      version: "1.0.5",
+      version: "1.0.6",
     },
     {
       instructions:

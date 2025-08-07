@@ -1,6 +1,6 @@
 {
   "name": "api-mcp-server",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "MCP Server for OpenAPI Specification",
   "main": "dist/index.js",
   "bin": {
@@ -32,6 +32,13 @@
     "url": "https://github.com/bluechenchenchen/api-mcp-server/issues"
   },
   "homepage": "https://github.com/bluechenchenchen/api-mcp-server#readme",
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@apidevtools/swagger-parser": "^12.0.0",
     "@modelcontextprotocol/sdk": "^1.13.3",
