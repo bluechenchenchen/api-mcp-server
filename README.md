@@ -10,19 +10,28 @@ English | [简体中文](README.zh-CN.md)
 
 <br/>
 
-This is a Swagger/OpenAPI documentation retrieval tool based on MCP (Model Context Protocol). It can fetch and parse Swagger/OpenAPI documentation from specified URLs and supports multiple transport methods.
+This is a Swagger/OpenAPI documentation retrieval tool based on MCP (Model Context Protocol). It can fetch and parse Swagger/OpenAPI documentation from specified URLs, intelligently clean and optimize the documentation to reduce token consumption, and provide it to intelligent IDEs (such as Cursor) in a standardized format. The tool supports multiple transport methods, making it easy for IDEs to retrieve and understand API documentation, enabling intelligent features such as interface suggestions, auto-completion, and code generation.
 
 ## ✨ Features
 
-- Fetch Swagger/OpenAPI documentation from remote URLs
-- Support for Swagger 2.0 and OpenAPI 3.x formats
-- Multiple transport methods:
-  - stdio: Standard input/output mode
-  - http: HTTP server mode
-  - sse: Server-Sent Events mode
-- Automatic port allocation and failover
-- CORS support
-- Comprehensive error handling
+- Intelligent Document Processing
+
+  - Fetch Swagger/OpenAPI documentation from remote URLs
+  - Support for Swagger 2.0 and OpenAPI 3.x formats
+  - Intelligent cleaning and optimization of document structure to reduce token consumption
+  - Extract key API information including endpoints, parameters, response formats, etc.
+
+- IDE-Friendly Design
+
+  - Standardized API description format
+  - Automatic generation of example requests and responses
+  - Intelligent parameter hints and type inference
+  - Support for code auto-completion and generation
+
+- Multiple Transport Methods
+  - stdio: Standard input/output mode for command-line tools
+  - http: HTTP server mode with RESTful interface support
+  - sse: Server-Sent Events mode for real-time communication
 
 ## Getting Started
 
@@ -74,6 +83,21 @@ This is a Swagger/OpenAPI documentation retrieval tool based on MCP (Model Conte
 - `--port <number>`: HTTP/SSE server port (default: 3000)
 - `--doc-url <url>`: Swagger/OpenAPI documentation URL (required)
 
+### Usage Examples
+
+#### 1. Basic Usage
+
+```bash
+# Using stdio mode (default)
+npx -y api-mcp-server --doc-url https://api.example.com/swagger.json
+
+# Using HTTP mode
+npx -y api-mcp-server --transport http --doc-url https://api.example.com/swagger.json
+
+# Using SSE mode with custom port
+npx -y api-mcp-server --transport sse --port 3001 --doc-url https://api.example.com/swagger.json
+```
+
 ## 💻 Development
 
 ```bash
@@ -88,6 +112,22 @@ pnpm dev
 
 # Build
 pnpm build
+```
+
+## Debugging
+
+Use @modelcontextprotocol/inspector
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+![](./src/images/inspector.png)
+
+## Run Example
+
+```bash
+pnpm example
 ```
 
 ## 📋 Requirements
