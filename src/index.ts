@@ -7,7 +7,9 @@ import { createServer } from "http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"; // 导入HTTP流传输类
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { Command } from "commander";
-import { fetchDocumentation } from "./api";
+import { fetchDocumentation } from "./fetchDocumentation";
+
+import { parseApiDoc } from "./parser";
 
 const program = new Command()
   .option("--transport <stdio|http|sse>", "transport type", "stdio")
@@ -59,7 +61,7 @@ function createServerInstance() {
   const server = new McpServer(
     {
       name: "API MCP Server",
-      version: "1.0.4",
+      version: "1.0.5",
     },
     {
       instructions:
@@ -84,8 +86,9 @@ Example: --doc-url=https://api.example.com/swagger.json`,
     async () => {
       try {
         const doc = await fetchDocumentation(cliOptions.docUrl);
+        const data = (await parseApiDoc(doc)) || {};
         return {
-          content: [{ type: "text", text: JSON.stringify(doc) }],
+          content: [{ type: "text", text: JSON.stringify(data) }],
         };
       } catch (error) {
         console.error("Error fetching documentation:", error);

@@ -1,18 +1,19 @@
 {
   "name": "api-mcp-server",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "MCP Server for OpenAPI Specification",
   "main": "dist/index.js",
   "bin": {
     "api-mcp-server": "./dist/index.js"
   },
   "scripts": {
-    "dev": "nodemon --exec ts-node src/index.ts --transport http --port 3000 --doc-url xxx",
+    "dev": "nodemon --exec ts-node src/index.ts --transport http --port 3001 --doc-url xxx",
     "build": "tsc",
     "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
     "start": "node dist/cli.js",
     "debug": "npx @modelcontextprotocol/inspector",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "example": "ts-node src/examples/index.ts"
   },
   "keywords": [
     "mcp",
