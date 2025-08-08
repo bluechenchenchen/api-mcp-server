@@ -2,14 +2,16 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-// import { z } from "zod";
+import { z } from "zod";
 import { createServer } from "http";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"; // 导入HTTP流传输类
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { Command } from "commander";
 import { fetchDocumentation } from "./fetchDocumentation";
+const { version } = require("../package.json");
 
-import { parseApiDoc } from "./parser";
+import { BaseParser, parseApiDoc } from "./parser";
+
 const swaggerData = require("./examples/openAi-swagger2-data.js");
 
 const program = new Command()
@@ -60,10 +62,7 @@ const sseTransports: Record<string, SSEServerTransport> = {};
 
 function createServerInstance() {
   const server = new McpServer(
-    {
-      name: "API MCP Server",
-      version: "1.0.6",
-    },
+    { name: "API MCP Server", version },
     {
       instructions:
         "This is a API MCP Server, you can use the tool to get the API documentation",
@@ -71,19 +70,55 @@ function createServerInstance() {
   );
 
   server.tool(
+    "get-api-info",
+    `A reference tool to get detailed information about a specific API endpoint.
+    This tool should ONLY be used when you need to look up the details of a specific API endpoint.
+
+    Parameters:
+    - path: The exact API endpoint path you want to reference (e.g., "/v1/audio/speech")
+
+    Returns detailed API information including:
+    - All available HTTP methods for this endpoint
+    - Endpoint description and purpose
+    - Required parameters and request body structure
+    - Expected response format and status codes
+    - Authentication requirements (if any)
+    - Example requests and responses (when available)
+
+    Note: You must provide a specific API path to use this tool. It is designed for referencing individual endpoint details only.`,
+    {
+      path: z.string().describe("API  path"),
+    },
+    async ({ path }) => {
+      try {
+        const doc = await fetchDocumentation(cliOptions.docUrl);
+        const parser = new BaseParser(doc);
+        const apiInfo = (await parser.getApiInfoByPath(path)) || {};
+        return {
+          content: [{ type: "text", text: JSON.stringify(apiInfo) }],
+        };
+      } catch (error) {
+        return {
+          content: [{ type: "text", text: "Error fetching documentation" }],
+        };
+      }
+    }
+  );
+
+  server.tool(
     "get-api-doc",
     `Fetches and parses Swagger/OpenAPI documentation from the specified URL (provided via --doc-url).
     
-Returns the complete API documentation in JSON format, including:
-- All API endpoints and their HTTP methods
-- Request parameters and body schemas
-- Response formats and status codes
-- API authentication requirements
-- Data models and definitions
-- API descriptions and examples
+    Returns the complete API documentation in JSON format, including:
+    - All API endpoints and their HTTP methods
+    - Request parameters and body schemas
+    - Response formats and status codes
+    - API authentication requirements
+    - Data models and definitions
+    - API descriptions and examples
 
-Note: The URL must be provided when starting the server using the --doc-url parameter.
-Example: --doc-url=https://api.example.com/swagger.json`,
+    Note: The URL must be provided when starting the server using the --doc-url parameter.
+    Example: --doc-url=https://api.example.com/swagger.json`,
     async () => {
       try {
         const doc = await fetchDocumentation(cliOptions.docUrl);

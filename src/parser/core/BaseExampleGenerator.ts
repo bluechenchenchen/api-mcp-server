@@ -25,6 +25,44 @@ export abstract class BaseExampleGenerator {
   async bundle(doc: any): Promise<void> {
     if (!doc) throw new Error("API documentation is not initialized");
     this.doc = await SwaggerParser.bundle(doc);
+    await this.resolveAllRefs(this.doc);
+  }
+
+  /**
+   * Recursively resolve all $ref references in the document
+   */
+  private async resolveAllRefs(
+    obj: any,
+    visited: Set<string> = new Set()
+  ): Promise<void> {
+    if (!obj || typeof obj !== "object") return;
+
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      for (let i = 0; i < obj.length; i++) {
+        if (obj[i]?.$ref) {
+          obj[i] = this.resolveRef(obj[i].$ref, visited);
+        } else {
+          await this.resolveAllRefs(obj[i], visited);
+        }
+      }
+      return;
+    }
+
+    // Handle objects
+    for (const key in obj) {
+      if (key === "$ref") {
+        const parent = obj;
+        const resolved = this.resolveRef(obj.$ref, visited);
+        // Copy all properties from resolved to parent
+        Object.keys(parent).forEach((k) => delete parent[k]);
+        Object.assign(parent, resolved);
+      } else if (obj[key]?.$ref) {
+        obj[key] = this.resolveRef(obj[key].$ref, visited);
+      } else {
+        await this.resolveAllRefs(obj[key], visited);
+      }
+    }
   }
 
   /**
@@ -158,9 +196,9 @@ export abstract class BaseExampleGenerator {
     const minItems = schema.minItems || this.options.defaultMinItems;
     const result = [];
 
-    if (items.$ref) {
-      items = this.resolveRef(items.$ref);
-    }
+    // if (items.$ref) {
+    //   items = this.resolveRef(items.$ref);
+    // }
 
     for (let i = 0; i < minItems; i++) {
       result.push(this.generateExample(items));
@@ -183,9 +221,9 @@ export abstract class BaseExampleGenerator {
       if (!this.options.includeWriteOnly && prop.writeOnly) continue;
 
       let resolvedProp = prop;
-      if (prop.$ref) {
-        resolvedProp = this.resolveRef(prop.$ref);
-      }
+      // if (prop.$ref) {
+      //   resolvedProp = this.resolveRef(prop.$ref);
+      // }
 
       result[key] = this.generateExample(resolvedProp);
     }
@@ -199,10 +237,10 @@ export abstract class BaseExampleGenerator {
   protected generateExample(schema: BaseSchema): any {
     if (!schema) return undefined;
 
-    if (schema.$ref) {
-      const resolvedSchema = this.resolveRef(schema.$ref);
-      return this.generateExample(resolvedSchema);
-    }
+    // if (schema.$ref) {
+    //   const resolvedSchema = this.resolveRef(schema.$ref);
+    //   return this.generateExample(resolvedSchema);
+    // }
 
     const type = schema.type || this.inferType(schema);
 

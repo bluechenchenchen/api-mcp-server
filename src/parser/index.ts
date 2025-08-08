@@ -6,6 +6,7 @@ import type {
   Swagger2Document,
   OpenAPI3Document,
 } from "./types";
+import { BaseExampleGenerator } from "./core/BaseExampleGenerator";
 
 /**
  * Parse Swagger/OpenAPI documentation
@@ -106,6 +107,19 @@ export async function parseApiDoc(
   }
 
   return parseResult;
+}
+
+export class BaseParser extends BaseExampleGenerator {
+  constructor(doc: Swagger2Document | OpenAPI3Document) {
+    super();
+    this.doc = doc;
+  }
+
+  public async getApiInfoByPath(path: string) {
+    await this.bundle(this.doc);
+    const apiInfo = this.doc.paths[path];
+    return apiInfo || {};
+  }
 }
 
 export * from "./types";
