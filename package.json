@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts --transport http --port 3001 --doc-url http://localhost:3001/docs",
-    "build": "tsc",
+    "build": "tsc && pnpm run copy-js-files",
     "build:types": "tsc --emitDeclarationOnly --declaration --outDir dist",
+    "copy-js-files": "copyfiles -u 1 \"src/**/*.js\" dist",
     "start": "node dist/index.js",
     "debug": "npx @modelcontextprotocol/inspector",
     "prepublishOnly": "pnpm run build",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
+    "copyfiles": "^2.4.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
