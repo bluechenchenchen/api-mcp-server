@@ -15,23 +15,17 @@ import { BaseExampleGenerator } from "./core/BaseExampleGenerator";
 export async function parseApiDoc(
   doc: Swagger2Document | OpenAPI3Document,
   options: ParserOptions = {}
-): Promise<ParseResult> {
+): Promise<ParseResult | Swagger2Document | OpenAPI3Document> {
   const parseResult: ParseResult = { apiList: [], apiInfo: {} };
 
   try {
-    if (!doc || !doc.paths) {
-      return parseResult;
-    }
+    if (!doc || !doc.paths) return parseResult;
 
     // Determine document type
     const isSwagger2 = "swagger" in doc && doc.swagger === "2.0";
     const isOpenApi3 = "openapi" in doc && doc.openapi.startsWith("3");
 
-    if (!isSwagger2 && !isOpenApi3) {
-      throw new Error(
-        "Unsupported document format. Only Swagger 2.0 and OpenAPI 3.0 are supported."
-      );
-    }
+    if (!isSwagger2 && !isOpenApi3) return doc;
 
     if (isSwagger2) {
       const generator = new Swagger2ExampleGenerator(options);
@@ -116,9 +110,14 @@ export class BaseParser extends BaseExampleGenerator {
   }
 
   public async getApiInfoByPath(path: string) {
-    await this.bundle(this.doc);
-    const apiInfo = this.doc.paths[path];
-    return apiInfo || {};
+    try {
+      await this.bundle(this.doc);
+      const apiInfo = this.doc.paths[path];
+      return apiInfo || {};
+    } catch (error) {
+      console.error("Error parsing API documentation:", error);
+      return {};
+    }
   }
 }
 
