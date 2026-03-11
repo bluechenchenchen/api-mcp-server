@@ -98,6 +98,8 @@ export async function parseApiDoc(
     parseResult.apiInfo = doc.info || {};
   } catch (error) {
     console.error("Error parsing API documentation:", error);
+    // 解析失败时返回原始文档，避免因 $ref 缺失等不完整数据导致无可用数据
+    return doc;
   }
 
   return parseResult;

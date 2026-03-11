@@ -92,10 +92,19 @@ function createServerInstance() {
     async ({ path }) => {
       try {
         const doc = await fetchDocumentation(cliOptions.docUrl);
-        const parser = new BaseParser(doc);
-        const apiInfo = (await parser.getApiInfoByPath(path)) || {};
+        try {
+          const parser = new BaseParser(doc);
+          const apiInfo = (await parser.getApiInfoByPath(path)) || {};
+          if (apiInfo && Object.keys(apiInfo).length > 0) {
+            return {
+              content: [{ type: "text", text: JSON.stringify(apiInfo) }],
+            };
+          }
+        } catch (_parseError) {
+          // 解析失败（如 $ref 缺失）时忽略，下面返回原始文档
+        }
         return {
-          content: [{ type: "text", text: JSON.stringify(apiInfo) }],
+          content: [{ type: "text", text: JSON.stringify(doc) }],
         };
       } catch (error) {
         return {
