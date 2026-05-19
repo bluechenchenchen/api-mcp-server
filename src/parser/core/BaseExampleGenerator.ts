@@ -8,6 +8,8 @@ import SwaggerParser from "@apidevtools/swagger-parser";
 export abstract class BaseExampleGenerator {
   protected options: Required<ParserOptions>;
   protected doc: any;
+  private refCache: Map<string, BaseSchema> = new Map();
+  private resolvingRefs: Set<string> = new Set();
 
   constructor(options: ParserOptions = {}) {
     this.options = {
@@ -24,6 +26,9 @@ export abstract class BaseExampleGenerator {
    */
   async bundle(doc: any): Promise<void> {
     if (!doc) throw new Error("API documentation is not initialized");
+    // Clear cache for new document
+    this.refCache.clear();
+    this.resolvingRefs.clear();
     this.doc = await SwaggerParser.bundle(doc);
     await this.resolveAllRefs(this.doc);
   }
@@ -31,19 +36,16 @@ export abstract class BaseExampleGenerator {
   /**
    * Recursively resolve all $ref references in the document
    */
-  private async resolveAllRefs(
-    obj: any,
-    visited: Set<string> = new Set()
-  ): Promise<void> {
+  private async resolveAllRefs(obj: any): Promise<void> {
     if (!obj || typeof obj !== "object") return;
 
     // Handle arrays
     if (Array.isArray(obj)) {
       for (let i = 0; i < obj.length; i++) {
         if (obj[i]?.$ref) {
-          obj[i] = this.resolveRef(obj[i].$ref, visited);
+          obj[i] = this.resolveRef(obj[i].$ref);
         } else {
-          await this.resolveAllRefs(obj[i], visited);
+          await this.resolveAllRefs(obj[i]);
         }
       }
       return;
@@ -53,34 +55,39 @@ export abstract class BaseExampleGenerator {
     for (const key in obj) {
       if (key === "$ref") {
         const parent = obj;
-        const resolved = this.resolveRef(obj.$ref, visited);
+        const resolved = this.resolveRef(obj.$ref);
         // Copy all properties from resolved to parent
         Object.keys(parent).forEach((k) => delete parent[k]);
         Object.assign(parent, resolved);
       } else if (obj[key]?.$ref) {
-        obj[key] = this.resolveRef(obj[key].$ref, visited);
+        obj[key] = this.resolveRef(obj[key].$ref);
       } else {
-        await this.resolveAllRefs(obj[key], visited);
+        await this.resolveAllRefs(obj[key]);
       }
     }
   }
 
   /**
-   * Resolve references
+   * Resolve references with caching support
    */
-  protected resolveRef(
-    ref: string,
-    visited: Set<string> = new Set()
-  ): BaseSchema {
+  protected resolveRef(ref: string): BaseSchema {
     if (!ref.startsWith("#/")) {
       throw new Error(`Unsupported reference format: ${ref}`);
     }
 
-    if (visited.has(ref)) {
-      console.warn(`Circular reference detected: ${decodeURIComponent(ref)}`);
-      return {};
+    // Check cache first
+    const cached = this.refCache.get(ref);
+    if (cached) {
+      return cached;
     }
-    visited.add(ref);
+
+    // Detect self-reference (tree structure pattern)
+    if (this.resolvingRefs.has(ref)) {
+      // Return a placeholder with $ref for tree structures
+      return { $ref: ref, type: "array", items: { $ref: ref } };
+    }
+
+    this.resolvingRefs.add(ref);
 
     const path = ref.substring(2).split("/");
     let schema: any = this.doc;
@@ -98,6 +105,7 @@ export abstract class BaseExampleGenerator {
       }
       schema = schema[segment];
       if (!schema) {
+        this.resolvingRefs.delete(ref);
         throw new Error(
           `Unable to resolve reference: ${ref}, segment: ${segment}`
         );
@@ -112,17 +120,11 @@ export abstract class BaseExampleGenerator {
         resolvedSchema.properties
       )) {
         if (prop.$ref) {
-          resolvedProperties[key] = this.resolveRef(
-            prop.$ref,
-            new Set([...visited])
-          );
+          resolvedProperties[key] = this.resolveRef(prop.$ref);
         } else {
           const clonedProp = { ...prop };
           if (clonedProp.items?.$ref) {
-            clonedProp.items = this.resolveRef(
-              clonedProp.items.$ref,
-              new Set([...visited])
-            );
+            clonedProp.items = this.resolveRef(clonedProp.items.$ref);
           }
           resolvedProperties[key] = clonedProp;
         }
@@ -131,11 +133,12 @@ export abstract class BaseExampleGenerator {
     }
 
     if (resolvedSchema.items?.$ref) {
-      resolvedSchema.items = this.resolveRef(
-        resolvedSchema.items.$ref,
-        new Set([...visited])
-      );
+      resolvedSchema.items = this.resolveRef(resolvedSchema.items.$ref);
     }
+
+    // Cache the result
+    this.refCache.set(ref, resolvedSchema);
+    this.resolvingRefs.delete(ref);
 
     return resolvedSchema;
   }
